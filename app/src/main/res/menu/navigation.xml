@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/na_home"
+        android:icon="@drawable/icon_home"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/na_channel"
+        android:icon="@drawable/icon_channel"
+        android:title="@string/title_channel" />
+    <item
+        android:id="@+id/na_workbench"
+        android:icon="@drawable/icon_workspace"
+        android:title="@string/title_work" />
+
+    <item
+        android:id="@+id/na_framework"
+        android:icon="@drawable/icon_framework"
+        android:title="@string/title_framework" />
+</menu>
