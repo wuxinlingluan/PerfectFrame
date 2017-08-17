@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -23,16 +22,12 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment extends ImmersionFragment {
-    protected String userName;
-    protected String pwd;
     Unbinder unbinder;
     private ProgressDialog mProgressDialog;
-    private Handler handler = new Handler();
     /**
      * 贴附的activity
      */
     protected FragmentActivity mActivity;
-
     /**
      * 根view
      */
@@ -68,6 +63,7 @@ public abstract class BaseFragment extends ImmersionFragment {
         mIsPrepare = true;
         onLazyLoad();
         setListener();
+        immersionInit();
         return mRootView;
     }
 
@@ -78,7 +74,9 @@ public abstract class BaseFragment extends ImmersionFragment {
             mProgressDialog.dismiss();
         }
     }
-
+    /*
+    * 初始化沉浸式状态栏
+    * */
     @Override
     protected void immersionInit() {
         ImmersionBar.with(getActivity()).init();
@@ -99,7 +97,9 @@ public abstract class BaseFragment extends ImmersionFragment {
     {
 
     }
-
+    /*
+    * 弹出吐司
+    * */
     protected void showToast(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
@@ -131,6 +131,7 @@ public abstract class BaseFragment extends ImmersionFragment {
         super.onDestroyView();
         unbinder.unbind();
         mProgressDialog.dismiss();
+        ImmersionBar.with(getActivity()).destroy();
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser)
@@ -155,10 +156,16 @@ public abstract class BaseFragment extends ImmersionFragment {
             onLazyLoad();
         }
     }
+    /*
+    * 开启新的activity
+    * */
     protected void startActivity(Class activity) {
         startActivity(activity, false);
     }
 
+     /*
+     * 开启新的activity 传入数据
+     * */
     protected void startActivity(Class activity, String key, String extra) {
         Intent intent = new Intent(getContext(), activity);
         intent.putExtra(key, extra);

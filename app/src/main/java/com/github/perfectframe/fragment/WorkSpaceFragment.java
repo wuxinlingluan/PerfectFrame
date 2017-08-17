@@ -16,6 +16,6 @@ public class WorkSpaceFragment extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
-        ImmersionBar.with(getActivity()).statusBarColor(R.color.colorchecked).init();
+       ImmersionBar.with(getActivity()).statusBarColor(R.color.colorchecked).init();
     }
 }

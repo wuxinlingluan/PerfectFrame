@@ -45,8 +45,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         synchronized (mActivities) {
             mActivities.add(this);
         }
-        initInject();
-        initVariables();
         if (mToolbar != null) {
             //初始化Toolbar
             initToolbar();
@@ -67,18 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mProgressDialog.dismiss();
-    }
-
-    /**
-     * 注入依赖
-     */
-    protected void initInject() {
-
-    }
-    /**
-     * 完成请求
-     */
-    protected void finishTask() {
     }
 
     @Override
@@ -146,13 +132,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         loadData();
     }
 
-    /**
-     * 初始化变量
-     */
-    protected void initVariables() {
-    }
-
-
+    /*
+    * 弹出progress
+    * */
     protected void showProgress(String msg) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -167,7 +149,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             mProgressDialog.dismiss();
         }
     }
-
+    /*
+    * 弹出吐司
+    * */
     protected void showToast(String msg) {
         Toast.makeText(BaseActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
