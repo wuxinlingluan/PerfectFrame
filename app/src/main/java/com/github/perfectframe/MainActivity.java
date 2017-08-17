@@ -36,17 +36,17 @@ public class MainActivity extends BaseActivity
                     initChannelFragment();
                     return true;
                 case R.id.na_framework:
-                    initWorkSpaceFragment();
+                    initFrameworkFragment();
                     return true;
                 case R.id.na_workbench:
-                    initFrameworkFragment();
+                    initWorkSpaceFragment();
                     return true;
             }
             return false;
         }
 
     };
-
+    //监听返回键,判断当侧拉菜单显示时,先关闭侧拉菜单
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        BottomNavigationViewHelper.disableShiftMode(navigation);
+        BottomNavigationViewHelper.disableShiftMode(navigation);//使用反射解决去除底部切换动画效果
         int[][] states = new int[][]{
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity
         ColorStateList csl = new ColorStateList(states, colors);
         navigation.setItemTextColor(csl);
         navigation.setItemIconTintList(csl);
-        initHomeFragment();
+        initHomeFragment();//进入页面时 初始化 首页
     }
 
     //初始化首页界面
