@@ -1,6 +1,9 @@
 package com.github.perfectframe;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -17,28 +20,31 @@ import com.github.perfectframe.fragment.FrameworkFragment;
 import com.github.perfectframe.fragment.HomeFragment;
 import com.github.perfectframe.fragment.WorkSpaceFragment;
 import com.github.perfectframe.util.BottomNavigationViewHelper;
-    //主页
+import com.yanzhenjie.album.Album;
+
+import java.util.ArrayList;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private HomeFragment homeFragment;
     private ChannelFragment channelFragment;
     private FrameworkFragment frameworkFragment;
     private WorkSpaceFragment workSpaceFragment;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener //底部按钮监听
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.na_home:
-                    initHomeFragment();
+                case R.id.na_home: //对应第一个按钮
+                     initHomeFragment();
                     return true;
-                case R.id.na_channel:
+                case R.id.na_channel://第二个
                     initChannelFragment();
                     return true;
-                case R.id.na_framework:
+                case R.id.na_framework://第三个
                     initFrameworkFragment();
                     return true;
-                case R.id.na_workbench:
+                case R.id.na_workbench://第四个
                     initWorkSpaceFragment();
                     return true;
             }
@@ -46,6 +52,10 @@ public class MainActivity extends BaseActivity
         }
 
     };
+    private ArrayList<String> pathList;
+    private String picPath;
+    private Bitmap bitmap;
+
     //监听返回键,判断当侧拉菜单显示时,先关闭侧拉菜单
     @Override
     public void onBackPressed() {
@@ -57,13 +67,18 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    //侧拉菜单点击事件
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Album.album(this)
+                    .selectCount(1) // 最多选择几张图片。
+                    .columnCount(2) // 相册展示列数，默认是2列。
+                    .camera(true) // 是否有拍照功能。
+                    .start(999); // 999是请求码，返回时onActivityResult()的第一个参数。
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -79,6 +94,7 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    //初始化布局
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -88,9 +104,9 @@ public class MainActivity extends BaseActivity
     @Override
     protected void initDatas() {
         super.initDatas();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);//初始化侧边栏
         navigationView.setNavigationItemSelectedListener(this);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);//初始化底部按钮
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomNavigationViewHelper.disableShiftMode(navigation);//使用反射解决去除底部切换动画效果
         int[][] states = new int[][]{
@@ -171,6 +187,20 @@ public class MainActivity extends BaseActivity
         }
         if(workSpaceFragment != null){
             transaction.hide(workSpaceFragment);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 999) {
+            if (resultCode == RESULT_OK) { // Successfully.
+                // 不要质疑你的眼睛，就是这么简单。
+                pathList = Album.parseResult(data);
+                picPath = pathList.get(0);
+                bitmap = BitmapFactory.decodeFile(picPath);
+            } else if (resultCode == RESULT_CANCELED) { // User canceled.
+                // 用户取消了操作。
+            }
         }
     }
 }
