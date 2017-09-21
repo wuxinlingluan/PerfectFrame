@@ -24,8 +24,13 @@ import com.yanzhenjie.album.Album;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ArrayList<String> pathList;
+    private String picPath;
+    private Bitmap bitmap;
     private HomeFragment homeFragment;
     private ChannelFragment channelFragment;
     private FrameworkFragment frameworkFragment;
@@ -52,9 +57,7 @@ public class MainActivity extends BaseActivity
         }
 
     };
-    private ArrayList<String> pathList;
-    private String picPath;
-    private Bitmap bitmap;
+
 
     //监听返回键,判断当侧拉菜单显示时,先关闭侧拉菜单
     @Override
@@ -105,6 +108,7 @@ public class MainActivity extends BaseActivity
     protected void initDatas() {
         super.initDatas();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);//初始化侧边栏
+
         navigationView.setNavigationItemSelectedListener(this);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);//初始化底部按钮
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -198,6 +202,8 @@ public class MainActivity extends BaseActivity
                 pathList = Album.parseResult(data);
                 picPath = pathList.get(0);
                 bitmap = BitmapFactory.decodeFile(picPath);
+              CircleImageView ivHead = (CircleImageView) findViewById(R.id.iv_head);
+                ivHead.setImageBitmap(bitmap);
             } else if (resultCode == RESULT_CANCELED) { // User canceled.
                 // 用户取消了操作。
             }
